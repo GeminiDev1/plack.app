@@ -33,6 +33,11 @@ final readonly class WorkspaceController
 
         $createWorkspace->handle($user, $name);
 
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('Workspace created.'),
+        ]);
+
         return back();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Models\Workspace;
+use Inertia\Support\SessionKey;
 use Inertia\Testing\AssertableInertia as Assert;
 
 it('may have workspaces', function (): void {
@@ -29,10 +30,26 @@ it('can create workspace', function (): void {
         'name' => 'Test Workspace',
     ]);
 
-    $response->assertRedirectBack();
+    $response->assertRedirectBack()
+        ->assertSessionHas(SessionKey::FLASH_DATA, [
+            'toast' => [
+                'type' => 'success',
+                'message' => __('Workspace created.'),
+            ],
+        ]);
 
     $workspaces = $user->workspaces;
 
     expect($workspaces->count())->toBe(1)
         ->and($workspaces->first()->name)->toBe('Test Workspace');
+});
+
+it('validates the workspace name', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->post(route('workspace.store'), [
+        'name' => 'ab',
+    ])->assertSessionHasErrors('name');
+
+    expect($user->workspaces()->count())->toBe(0);
 });

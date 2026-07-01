@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import CreateWorkspaceDialog from '@/components/create-workspace-dialog';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -36,13 +37,22 @@ export default function WorkspaceList({
             <Head title="Workspaces" />
 
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <Heading title="Workspaces" description="Workspaces you own." />
+                <div className="flex items-center justify-between">
+                    <Heading
+                        title="Workspaces"
+                        description="Workspaces you own."
+                    />
+
+                    <CreateWorkspaceDialog />
+                </div>
 
                 {workspaces.data.length === 0 ? (
-                    <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-sidebar-border/70 p-12 dark:border-sidebar-border">
+                    <div className="flex flex-1 flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-sidebar-border/70 p-12 dark:border-sidebar-border">
                         <p className="text-sm text-muted-foreground">
                             No workspaces yet.
                         </p>
+
+                        <CreateWorkspaceDialog />
                     </div>
                 ) : (
                     <ul className="flex flex-col gap-2">
